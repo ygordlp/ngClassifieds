@@ -1,0 +1,71 @@
+<md-toolbar>
+    <div class="md-toolbar-tools">
+        <p>
+            <strong>ngClassifieds </strong>
+        </p>
+
+        <md-button ng-click="clfc.openSidebar()">
+            <md-icon class="mdi mdi-plus-circle"></md-icon>
+            New Classified
+        </md-button>
+
+        <md-button ng-click="showFilters = true">
+            <md-icon class="mdi mdi-magnify"></md-icon>
+            Filters
+        </md-button>
+    </div>
+</md-toolbar>
+
+<div class="filters" layout="row" layout-align="center top" ng-show="showFilters">
+    <md-input-container>
+        <label>Event search term</label>
+        <input type="text" ng-model="classifiedsFilter">
+    </md-input-container>
+
+    <md-input-container>
+        <label for="title">Category</label>
+        <md-select ng-model="category">
+            <md-option ng-repeat="category in clfc.categories" value="{{ category }}">{{ category }}</md-option>
+        </md-select>
+    </md-input-container>
+
+    <md-input-container layout-align="top">
+        <md-button style="margin: 0px;" class="md-warn" ng-click="classfiedsFilter = ''; category = '';">Clear</md-button>
+    </md-input-container>
+</div>
+
+<ui-view></ui-view>
+
+<md-content class="md-padding" layout="row" layout-wrap>
+    <md-card flex="30" ng-repeat="classified in clfc.classifieds | 
+                                  filter: classifiedsFilter |
+                                  filter: category" class="classified">
+        <img ng-src="{{classified.image}}" alt="" />
+        <md-card-content>
+            <div class="classified-info" ng-hide="showContact">
+                <h2 class="md-title">{{classified.title}}</h2>
+                <h2>{{classified.posted | date:'longDate'}}</h2>
+                <h3>{{classified.price | currency}}</h3>
+                <p>{{classified.description}}</p>
+            </div>
+            <div class="classified-contact" ng-show="showContact">
+                <p class="mdi mdi-account"> {{classified.contact.name}}</p>
+                <p class="mdi mdi-phone"> {{classified.contact.phone}}</p>
+                <p class="mdi mdi-email"> {{classified.contact.email}}</p>
+            </div>
+            <div layout="row">
+                <md-button ng-click="showContact = true" ng-hide="showContact">Contact</md-button>
+                <md-button ng-click="showContact = false" ng-show="showContact">Details</md-button>
+                <md-button ng-click="showAdmin = !showAdmin">{{(showAdmin)? "Close" : "Admin"}}</md-button>
+            </div>
+
+            <div class="classified-admin" ng-if="showAdmin">
+                <h3>Admin</h3>
+                <div layout="row">
+                    <md-button class="md-primary" ng-click="clfc.editClassified(classified)">Edit</md-button>
+                    <md-button class="md-warn" ng-click="clfc.deleteClassified($event, classified)">Delete</md-button>
+                </div>
+            </div>
+        </md-card-content>
+    </md-card>
+</md-content>

@@ -3,11 +3,26 @@
 
     angular
         .module('ngClassifieds')
-        .controller('classifiedsCtrl', function($scope, $http, classifiedsFactory, $mdSidenav, $mdToast, $mdDialog) {
+        .controller('classifiedsCtrl', function($scope, $state, $http, classifiedsFactory, $mdSidenav, $mdToast, $mdDialog) {
+            var self = this;
+
+            self.categories;
+            self.classified;
+            self.classifieds;
+            self.editting;
+
+            self.openSidebar = openSidebar;
+            self.closeSidebar = closeSidebar;
+            self.saveClassified = saveClassified;
+            self.editClassified = editClassified;
+            self.saveEdit = saveEdit;
+            self.deleteClassified = deleteClassified;
+
+
             classifiedsFactory.getClassifieds().then((classifieds) => {
                 console.log('Data received');
-                $scope.classifieds = classifieds.data;
-                $scope.categories = getCategories($scope.classifieds);
+                self.classifieds = classifieds.data;
+                self.categories = getCategories(self.classifieds);
             });
 
             var contact = {
@@ -16,38 +31,38 @@
                 email: "ygordlp@gmail.com"
             };
 
-            $scope.openSidebar = function() {
-                $mdSidenav('left').open();
-            };
+            function openSidebar() {
+                $state.go('classifieds.new');
+            }
 
-            $scope.closeSidebar = function() {
+            function closeSidebar() {
                 $mdSidenav('left').close();
-                $scope.classified = {};
-                $scope.editting = false;
-            };
+                self.classified = {};
+                self.editting = false;
+            }
 
-            $scope.saveClassified = function(classified) {
+            function saveClassified(classified) {
                 if (classified) {
                     classified.contact = contact;
-                    $scope.classifieds.push(classified);
-                    $scope.classified = {};
-                    $scope.closeSidebar();
+                    self.classifieds.push(classified);
+                    self.classified = {};
+                    closeSidebar();
                     showToast('Classified Saved!');
                 }
-            };
+            }
 
-            $scope.editClassified = function(classified) {
-                $scope.editting = true;
-                $scope.openSidebar();
-                $scope.classified = classified;
-            };
+            function editClassified(classified) {
+                self.editting = true;
+                openSidebar();
+                self.classified = classified;
+            }
 
-            $scope.saveEdit = function() {
-                $scope.closeSidebar();
+            function saveEdit() {
+                closeSidebar();
                 showToast('Classified Updated!');
-            };
+            }
 
-            $scope.deleteClassified = function(event, classified) {
+            function deleteClassified(event, classified) {
                 var confirm = $mdDialog.confirm()
                     .title('Are you sure you want to delete ' + classified.title + '?')
                     .ok('Yes')
@@ -55,13 +70,13 @@
                     .targetEvent(event);
 
                 $mdDialog.show(confirm).then(() => {
-                    var index = $scope.classifieds.indexOf(classified);
-                    $scope.classifieds.splice(index, 1);
+                    var index = self.classifieds.indexOf(classified);
+                    self.classifieds.splice(index, 1);
                     showToast('Item deleted!');
                 }, () => {
                     //Nothing really;
                 });
-            };
+            }
 
             function showToast(message) {
                 $mdToast.show($mdToast.simple()

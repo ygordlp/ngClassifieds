@@ -6,25 +6,18 @@ angular
             .accentPalette('orange');
 
         $stateProvider
-            .state('one', {
-                url: '/stateone',
-                template: '<h1>{{oneCtrl.message}}</h1>',
-                controller: 'stateOneCtrl as oneCtrl'
-            })
-            .state('two', {
-                url: '/statetwo',
-                template: '<h1>State Two</h1> <md-button ui-sref="two.more">Go to nested state</md-button><ui-view></ui-view>'
-            }).state('two.more', {
-                url: '/more',
-                template: '<p>This is the nested state.</p>'
+            .state('classifieds', {
+                url: '/classifieds',
+                templateUrl: 'components/classifieds/classifieds.tpl.html',
+                controller: 'classifiedsCtrl as clfc'
+            }).state('classifieds.new', {
+                url: '/new',
+                templateUrl: 'components/classifieds/new/classifieds.new.tpl.html',
+                controller: 'newClassifiedsCtrl as clfc'
             });
     })
     .directive('helloWorld', function() {
         return {
             template: '<h1>{{message}}</h1>'
         };
-    })
-    .controller('stateOneCtrl', function($scope) {
-        var self = this;
-        self.message = 'Hey from state one';
     });
