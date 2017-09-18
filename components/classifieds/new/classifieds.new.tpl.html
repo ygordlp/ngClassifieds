@@ -1,4 +1,4 @@
-<md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left">
+<md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-open="newClfc.sidenavOpen">
     <md-toolbar>
         <h1 class="md-toolbar-tools">Add a Classified</h1>
     </md-toolbar>
@@ -6,25 +6,24 @@
         <form>
             <md-input-container>
                 <label for="title">Title</label>
-                <input type="text" id="title" ng-model="clfc.classified.title" md-autofocus>
+                <input type="text" id="title" ng-model="newClfc.classified.title" md-autofocus>
             </md-input-container>
             <md-input-container>
                 <label for="price">Price</label>
-                <input type="text" id="price" ng-model="clfc.classified.price">
+                <input type="text" id="price" ng-model="newClfc.classified.price">
             </md-input-container>
             <md-input-container>
                 <label for="description">Description</label>
-                <input type="text" id="description" ng-model="clfc.classified.description">
+                <input type="text" id="description" ng-model="newClfc.classified.description">
             </md-input-container>
             <md-input-container>
                 <label for="image">Image Link</label>
-                <input type="text" id="image" ng-model="clfc.classified.image">
+                <input type="text" id="image" ng-model="newClfc.classified.image">
             </md-input-container>
-            <md-button class="md-primary" ng-click="clfc.saveClassified(clfc.classified)" ng-if="!clfc.editting">Save</md-button>
-            <md-button class="md-primary" ng-if="clfc.editting" ng-click="clfc.saveEdit()">Save Edit</md-button>
-            <md-button class="md-warn" ng-click="clfc.closeSidebar()">Cancel</md-button>
+            <md-button class="md-primary" ng-click="newClfc.saveClassified(newClfc.classified)">Save</md-button>
+            <md-button class="md-warn" ng-click="newClfc.closeSidebar()">Cancel</md-button>
 
-            <pre>{{classified | json}}</pre>
+            <pre>{{newClfc.classified | json}}</pre>
         </form>
     </md-content>
 </md-sidenav>

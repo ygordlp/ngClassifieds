@@ -1,65 +1,50 @@
-(function() {
+(function () {
     "use strict";
 
     angular
         .module('ngClassifieds')
-        .controller('classifiedsCtrl', function($scope, $state, $http, classifiedsFactory, $mdSidenav, $mdToast, $mdDialog) {
+        .controller('classifiedsCtrl', function ($scope, $state, $http, classifiedsFactory, $mdSidenav, $mdToast, $mdDialog) {
             var self = this;
 
             self.categories;
             self.classified;
             self.classifieds;
-            self.editting;
 
             self.openSidebar = openSidebar;
-            self.closeSidebar = closeSidebar;
-            self.saveClassified = saveClassified;
             self.editClassified = editClassified;
-            self.saveEdit = saveEdit;
             self.deleteClassified = deleteClassified;
 
-
             classifiedsFactory.getClassifieds().then((classifieds) => {
-                console.log('Data received');
                 self.classifieds = classifieds.data;
                 self.categories = getCategories(self.classifieds);
+
+                var firebase = classifiedsFactory.ref;
+
+                angular.forEach(self.classifieds, (item) => {
+                    console.log('adding item', item.title);
+                    firebase.add(item);
+                });
             });
 
-            var contact = {
-                name: "Ygor Duarte",
-                phone: "(19) 999576569",
-                email: "ygordlp@gmail.com"
-            };
+            $scope.$on('newClassified', (event, classified) => {
+                classified.id = self.classifieds.length + 1;
+                self.classifieds.push(classified);
+                showToast('Classified saved');
+            });
+
+            $scope.$on('editSave', (event, message) => {
+                showToast(message);
+            });
 
             function openSidebar() {
                 $state.go('classifieds.new');
             }
 
-            function closeSidebar() {
-                $mdSidenav('left').close();
-                self.classified = {};
-                self.editting = false;
-            }
-
-            function saveClassified(classified) {
-                if (classified) {
-                    classified.contact = contact;
-                    self.classifieds.push(classified);
-                    self.classified = {};
-                    closeSidebar();
-                    showToast('Classified Saved!');
-                }
-            }
-
             function editClassified(classified) {
-                self.editting = true;
-                openSidebar();
-                self.classified = classified;
-            }
-
-            function saveEdit() {
-                closeSidebar();
-                showToast('Classified Updated!');
+                $state.go('classifieds.edit', {
+                    id: classified.id,
+                    classified: classified
+                });
             }
 
             function deleteClassified(event, classified) {
@@ -87,14 +72,13 @@
 
             function getCategories(classifieds) {
                 var categories = [];
-                angular.forEach(classifieds, function(item) {
-                    angular.forEach(item.categories, function(category) {
+                angular.forEach(classifieds, function (item) {
+                    angular.forEach(item.categories, function (category) {
                         categories.push(category);
                     });
                 });
 
                 return _.uniq(categories);
             }
-
         });
 })();
