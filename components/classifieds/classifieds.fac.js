@@ -4,10 +4,10 @@
     angular
         .module('ngClassifieds')
         .factory('classifiedsFactory', function($http, $firebaseArray) {
-            var firebase = new Firebase('https://ngclassifieds-ygor.firebaseio.com/');
+            var ref = new Firebase('https://ngclassifieds-ygor.firebaseio.com/classifieds');
 
             return {
-                firebase: $firebaseArray(firebase)
+                firebase: $firebaseArray(ref)
             };
         });
 })();
