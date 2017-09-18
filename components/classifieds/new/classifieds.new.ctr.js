@@ -1,9 +1,9 @@
-(function () {
+(function() {
     "use strict";
 
     angular
         .module('ngClassifieds')
-        .controller('newClassifiedsCtrl', function ($scope, $state, $mdSidenav, $mdDialog, $timeout, classifiedsFactory) {
+        .controller('newClassifiedsCtrl', function($scope, $state, $mdSidenav, $mdDialog, $timeout, classifiedsFactory) {
             var self = this;
             self.sidenavOpen;
             self.saveClassified = saveClassified;
@@ -12,7 +12,7 @@
                 $mdSidenav('left').open();
             });
 
-            $scope.$watch(function () { return self.sidenavOpen }, function (value) {
+            $scope.$watch(function() { return self.sidenavOpen }, function(value) {
                 if (value === false) {
                     $mdSidenav('left').close().then(() => {
                         $state.go('classifieds');

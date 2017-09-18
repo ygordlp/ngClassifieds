@@ -36,36 +36,6 @@
 
 <ui-view></ui-view>
 
-<md-content class="md-padding" layout="row" layout-wrap>
-    <md-card flex="30" ng-repeat="classified in clfc.classifieds | 
-                                  filter: classifiedsFilter |
-                                  filter: category" class="classified">
-        <img ng-src="{{classified.image}}" alt="" />
-        <md-card-content>
-            <div class="classified-info" ng-hide="showContact">
-                <h2 class="md-title">{{classified.title}}</h2>
-                <h2>{{classified.posted | date:'longDate'}}</h2>
-                <h3>{{classified.price | currency}}</h3>
-                <p>{{classified.description}}</p>
-            </div>
-            <div class="classified-contact" ng-show="showContact">
-                <p class="mdi mdi-account"> {{classified.contact.name}}</p>
-                <p class="mdi mdi-phone"> {{classified.contact.phone}}</p>
-                <p class="mdi mdi-email"> {{classified.contact.email}}</p>
-            </div>
-            <div layout="row">
-                <md-button ng-click="showContact = true" ng-hide="showContact">Contact</md-button>
-                <md-button ng-click="showContact = false" ng-show="showContact">Details</md-button>
-                <md-button ng-click="showAdmin = !showAdmin">{{(showAdmin)? "Close" : "Admin"}}</md-button>
-            </div>
-
-            <div class="classified-admin" ng-if="showAdmin">
-                <h3>Admin</h3>
-                <div layout="row">
-                    <md-button class="md-primary" ng-click="clfc.editClassified(classified)">Edit</md-button>
-                    <md-button class="md-warn" ng-click="clfc.deleteClassified($event, classified)">Delete</md-button>
-                </div>
-            </div>
-        </md-card-content>
-    </md-card>
+<md-content>
+    <classified-card class="md-padding" layout="row" layout-wrap classifieds="clfc.classifieds" classifieds-filter="classifiedsFielter" category="category"></classified-card>
 </md-content>
